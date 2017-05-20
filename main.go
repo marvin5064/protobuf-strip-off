@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -113,5 +114,27 @@ func TestP2() {
 	r.GET("/p2bl/binary", func(c *gin.Context) {
 		c.Data(200, "application/octet-stream", marshaledData2)
 	})
+
+	recPayload, err := json.Marshal(proto2Small)
+	if err != nil {
+		fmt.Println("proto 2 large marshal json", err)
+		return
+	}
+
+	// this only way I can think of is convert the the data to json inorder to strip
+	jsonSmall := &protobuf.SmallerP2Define{}
+	err = json.Unmarshal(recPayload, jsonSmall)
+	if err != nil {
+		fmt.Println("Unmarshal(recPayload, jsonSmall)", err)
+		return
+	}
+	fmt.Println("jsonSmall", jsonSmall)
+	fmt.Println("recPayload", recPayload)
+	lastPayload, err := proto.Marshal(jsonSmall)
+	if err != nil {
+		fmt.Println("proto marshal", err)
+		return
+	}
+	fmt.Println("the binary payload of p2 small after json convert:", lastPayload)
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
