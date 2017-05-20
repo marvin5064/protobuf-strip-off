@@ -1,0 +1,24 @@
+syntax = "proto3";
+package protobuf;
+
+message LargerP3Define {
+	uint32 provider = 1;
+	uint32 competition_id = 2;
+	uint32 event_id = 3;
+	uint32 market_id = 4;
+	string outcome = 5;
+	string special_bet_value = 6;
+	double odds = 7;
+	bool is_live = 8;
+	string currency_pair = 9;
+	double stake_factor = 10;
+}
+
+message SmallerP3Define {
+	uint32 provider = 1;
+	uint32 competition_id = 2;
+	string special_bet_value = 6;
+	double odds = 7;
+	bool is_live = 8;
+	double stake_factor = 10;
+}
