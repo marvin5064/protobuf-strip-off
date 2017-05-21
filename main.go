@@ -12,6 +12,7 @@ import (
 func main() {
 	fmt.Println("Testing if protobuf can be strip off by define automatically")
 	TestP3()
+	TestP2ToP3()
 	TestP2()
 }
 
@@ -57,6 +58,16 @@ func TestP3() {
 		return
 	}
 	fmt.Println("proto3 back large converted:", proto3BackLarge)
+
+	fmt.Println("Let s try it with from p3 to p2")
+	proto2Small := &protobuf.SmallerP2Define{}
+	err = proto.Unmarshal(p3Payload, proto2Small)
+	if err != nil {
+		fmt.Println("p2 small unmarshall err:", err)
+		return
+	}
+	fmt.Println("proto3 large to p2 small:", proto2Small)
+
 }
 
 func TestP2() {
@@ -137,4 +148,49 @@ func TestP2() {
 	}
 	fmt.Println("the binary payload of p2 small after json convert:", lastPayload)
 	r.Run() // listen and serve on 0.0.0.0:8080
+}
+
+func TestP2ToP3() {
+	fmt.Println("Testing from p2 to p3")
+	proto2Large := &protobuf.LargerP2ToP3Define{
+		Provider:        proto.Uint32(1),
+		CompetitionId:   proto.Uint32(2),
+		EventId:         proto.Uint32(3),
+		MarketId:        proto.Uint32(4),
+		Outcome:         proto.String("5"),
+		SpecialBetValue: proto.String("6"),
+		Odds:            proto.Float64(7.1),
+		IsLive:          proto.Bool(true),
+		CurrencyPair:    proto.String("8"),
+		StakeFactor:     proto.Float64(9.1),
+	}
+
+	fmt.Println("proto2 large origin:", proto2Large)
+	p2Payload, err := proto.Marshal(proto2Large)
+	if err != nil {
+		fmt.Println("p2 large marshall err:", err)
+		return
+	}
+	fmt.Println("proto2 large binary:", p2Payload)
+	proto3Small := &protobuf.SmallerP3Define{}
+	err = proto.Unmarshal(p2Payload, proto3Small)
+	if err != nil {
+		fmt.Println("P3 small unmarshall err:", err)
+		return
+	}
+	fmt.Println("proto3 small converted:", proto3Small)
+
+	p3PayloadSmall, err := proto.Marshal(proto3Small)
+	if err != nil {
+		fmt.Println("P3 small marshall err:", err)
+		return
+	}
+	fmt.Println("P3 small payload:", p3PayloadSmall)
+	proto3BackLarge := &protobuf.LargerP3Define{}
+	err = proto.Unmarshal(p3PayloadSmall, proto3BackLarge)
+	if err != nil {
+		fmt.Println("P3 small unmarshall err:", err)
+		return
+	}
+	fmt.Println("proto3 back large converted:", proto3BackLarge)
 }

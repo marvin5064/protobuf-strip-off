@@ -12,3 +12,16 @@ message SmallerP2Define {
 	optional uint32 competition_id = 2;
 	optional uint32 market_id = 4;
 }
+
+message LargerP2ToP3Define {
+	optional uint32 provider = 1;
+	optional uint32 competition_id = 2;
+	optional uint32 event_id = 3;
+	optional uint32 market_id = 4;
+	optional string outcome = 5;
+	optional string special_bet_value = 6;
+	optional double odds = 7;
+	optional bool is_live = 8;
+	optional string currency_pair = 9;
+	optional double stake_factor = 10;
+}
