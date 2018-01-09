@@ -13,10 +13,33 @@ import (
 
 func main() {
 	CheckOutProtobufProperty()
-	fmt.Println("Testing if protobuf can be strip off by define automatically")
-	TestP3()
-	TestP2ToP3()
-	TestP2()
+	CheckOutProtobufPropertyWithProto()
+	// fmt.Println("Testing if protobuf can be strip off by define automatically")
+	// TestP3()
+	// TestP2ToP3()
+	// TestP2()
+}
+
+func CheckOutProtobufPropertyWithProto() {
+	fmt.Println("CheckOutProtobufPropertyWithProto ...")
+	smallDefine := &protobuf.SmallerP3Define{}
+
+	v := reflect.ValueOf(*smallDefine)
+	t := v.Type()
+	result := proto.GetProperties(t).Prop
+	fmt.Println("result", result)
+	for i, r := range result {
+		fmt.Println("result - ", i, ":")
+		fmt.Println(
+			"id - ", r.Tag,
+			"; name - ", r.Name,
+			"; type -", r.Wire,
+			"; JSONName -", r.JSONName,
+			"; OrigName -", r.OrigName,
+		)
+	}
+
+	fmt.Println("smallDefine", smallDefine)
 }
 
 func CheckOutProtobufProperty() {
