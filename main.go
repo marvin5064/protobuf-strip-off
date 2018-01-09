@@ -3,19 +3,37 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
 
+	protohelper "github.com/alecthomas/protobuf"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/protobuf/proto"
 	"github.com/marvin5064/protobuf-strip-off/protobuf"
 )
 
 func main() {
+	CheckOutProtobufProperty()
 	fmt.Println("Testing if protobuf can be strip off by define automatically")
 	TestP3()
 	TestP2ToP3()
 	TestP2()
 }
 
+func CheckOutProtobufProperty() {
+	fmt.Println("CheckOutProtobufProperty ...")
+	smallDefine := &protobuf.SmallerP3Define{}
+
+	v := reflect.ValueOf(*smallDefine)
+	t := v.Type()
+	result := protohelper.ProtoFields(t)
+	fmt.Println("result", result)
+	for i, r := range result {
+		fmt.Println("result - ", i, ":")
+		fmt.Println("id - ", r.ID, "; name - ", r.Field.Name)
+	}
+
+	fmt.Println("smallDefine", smallDefine)
+}
 func TestP3() {
 	fmt.Println("Testing proto 3")
 	proto3Large := &protobuf.LargerP3Define{
